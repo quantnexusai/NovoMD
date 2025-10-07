@@ -1,0 +1,12 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+python-dotenv==1.0.0
+numpy==1.24.3
+biopython==1.81
+
+# RDKit and OpenBabel - install separately due to complex dependencies
+# See installation instructions in README.md
+# rdkit-pypi==2022.9.5
+# openbabel (install via conda or system package manager)

@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  novomd:
+    build: .
+    ports:
+      - "8010:8010"
+    environment:
+      - NOVOMD_API_KEY=${NOVOMD_API_KEY:-change-me-in-production}
+      - PORT=8010
+      - LOG_LEVEL=INFO
+    volumes:
+      # Mount code for development (comment out for production)
+      - ./main.py:/app/main.py
+      - ./config.py:/app/config.py
+      - ./auth.py:/app/auth.py
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8010/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
