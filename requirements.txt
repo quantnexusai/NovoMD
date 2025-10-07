@@ -4,6 +4,7 @@ pydantic==2.5.0
 pydantic-settings==2.1.0
 python-dotenv==1.0.0
 numpy==1.24.3
+scipy==1.11.4
 biopython==1.81
 
 # RDKit and OpenBabel - install separately due to complex dependencies

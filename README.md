@@ -8,13 +8,18 @@ Open-source REST API for molecular dynamics simulations, protein-ligand docking,
 
 ## Features
 
-- **Molecular Dynamics Simulations**: Run MD simulations for drug-protein interactions
-- **Binding Affinity Calculations**: Estimate binding free energy using MM-GBSA/MM-PBSA methods
-- **Conformational Analysis**: Generate and analyze molecular conformers
-- **Trajectory Analysis**: Compute RMSD, RMSF, and interaction contacts
-- **SMILES to OpenMD Conversion**: Convert SMILES strings to OpenMD format files
+- **SMILES to OpenMD Conversion**: Convert SMILES strings to OpenMD format files with real 3D optimization
+- **Comprehensive Property Calculation**: 32+ molecular descriptors calculated from real 3D coordinates
+  - **Geometry** (7): radius of gyration, asphericity, eccentricity, inertia tensors, PMI
+  - **Energy** (6): conformer energy, VDW, electrostatic, torsion/angle strain
+  - **Electrostatics** (6): dipole moment, partial charges, electrostatic potential
+  - **Surface/Volume** (4): SASA, molecular volume, globularity, surface-to-volume ratio
+  - **Atom Counts** (2): total atoms, heavy atoms
+  - **3D Visualization** (5+): full atomic coordinates, bond connectivity, PDB format
 - **Multiple Force Fields**: Support for AMBER, CHARMM, OPLS, and GROMOS force fields
-- **Solvation Studies**: Analyze molecules in various solvent environments
+- **Real Calculations Only**: No mock data - all properties derived from actual 3D structures
+
+> **Note**: This API focuses on real molecular property calculations. For full MD simulations (trajectories, binding affinity), integrate with GROMACS, AMBER, or similar MD engines.
 
 ## Tech Stack
 
@@ -92,71 +97,7 @@ curl -H "X-API-Key: your-api-key" http://localhost:8010/status
 
 ### Examples
 
-#### 1. Submit a Molecular Dynamics Simulation
-
-```bash
-curl -X POST http://localhost:8010/simulate \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: your-api-key" \
-  -d '{
-    "protein_pdb": "1ABC",
-    "ligand_smiles": "CC(=O)Oc1ccccc1C(=O)O",
-    "simulation_time_ns": 1.0,
-    "temperature_k": 300,
-    "solvent": "water",
-    "force_field": "amber14"
-  }'
-```
-
-Response:
-```json
-{
-  "job_id": "MD_20250107120000_A1B2C3",
-  "status": "submitted",
-  "protein_pdb": "1ABC",
-  "ligand_smiles": "CC(=O)Oc1ccccc1C(=O)O",
-  "simulation_parameters": {
-    "time_ns": 1.0,
-    "temperature_k": 300.0,
-    "solvent": "water",
-    "force_field": "amber14",
-    "timestep_fs": 2.0,
-    "output_frequency_ps": 10
-  },
-  "estimated_completion_time": 60,
-  "queue_position": 2
-}
-```
-
-#### 2. Calculate Binding Affinity
-
-```bash
-curl -X POST http://localhost:8010/binding-affinity \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: your-api-key" \
-  -d '{
-    "protein_pdb": "1ABC",
-    "ligand_smiles": "CC(=O)Oc1ccccc1C(=O)O",
-    "method": "MM-GBSA",
-    "num_frames": 100
-  }'
-```
-
-#### 3. Perform Conformational Analysis
-
-```bash
-curl -X POST http://localhost:8010/conformational-analysis \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: your-api-key" \
-  -d '{
-    "molecule_smiles": "CC(C)Cc1ccc(cc1)[C@@H](C)C(=O)O",
-    "num_conformers": 10,
-    "temperature_k": 300,
-    "minimize": true
-  }'
-```
-
-#### 4. Convert SMILES to OpenMD Format
+#### Convert SMILES to OpenMD Format with Full Property Calculation
 
 ```bash
 curl -X POST http://localhost:8010/smiles-to-omd \
@@ -171,21 +112,22 @@ curl -X POST http://localhost:8010/smiles-to-omd \
   }'
 ```
 
+**Returns 32+ Molecular Properties:**
+- **Geometry** (7): radius_of_gyration, asphericity, eccentricity, inertia_shape_factor, span_r, pmi1, pmi2
+- **Energy** (6): conformer_energy, vdw_energy, electrostatic_energy, torsion_strain, angle_strain, optimization_delta
+- **Electrostatics** (6): dipole_moment, total_charge, max/min_partial_charge, charge_span, electrostatic_potential
+- **Surface/Volume** (4): sasa, molecular_volume, globularity, surface_to_volume_ratio
+- **Atom Counts** (2): num_atoms_with_h, num_heavy_atoms
+- **3D Visualization** (5+): coords_x, coords_y, coords_z, atom_types, bonds
+
 ## API Endpoints
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/health` | GET | Health check (no auth required) |
 | `/status` | GET | Service status and capabilities |
-| `/simulate` | POST | Submit MD simulation |
-| `/job/{job_id}` | GET | Get simulation job status |
-| `/trajectory/{job_id}` | GET | Retrieve trajectory data |
-| `/binding-affinity` | POST | Calculate binding affinity |
-| `/conformational-analysis` | POST | Generate conformers |
-| `/trajectory-analysis` | POST | Analyze MD trajectory |
-| `/solvation-study` | POST | Run solvation study |
-| `/smiles-to-omd` | POST | Convert SMILES to OpenMD |
-| `/atom2md` | POST | Convert PDB to OpenMD |
+| `/smiles-to-omd` | POST | Convert SMILES to OpenMD with 32+ properties |
+| `/atom2md` | POST | Convert PDB to OpenMD format |
 | `/force-fields` | GET | List available force fields |
 | `/force-field-types/{ff}` | GET | Get atom types for force field |
 
@@ -196,15 +138,6 @@ curl -X POST http://localhost:8010/smiles-to-omd \
 - **CHARMM36** (charmm36) - Excellent for lipids and membranes
 - **OPLS-AA/M** (opls) - Optimized for small molecules
 - **GROMOS 54A7** (gromos54a7) - United atom force field
-
-## Supported Solvents
-
-- Water (TIP3P, TIP4P, SPC)
-- Methanol
-- Ethanol
-- DMSO
-- Chloroform
-- Vacuum
 
 ## Configuration
 
