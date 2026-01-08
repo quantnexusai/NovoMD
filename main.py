@@ -197,8 +197,9 @@ def pdb_to_omd(pdb_content: str, force_field: str, box_size: float, charge_metho
 
     # Add positions for each atom
     for atom in atoms:
+        atom_index: int = atom["index"]  # type: ignore[assignment]
         omd_content += f"""
-      <StuntDouble index="{int(atom['index']) - 1}">
+      <StuntDouble index="{atom_index - 1}">
         <position x="{atom['x']}" y="{atom['y']}" z="{atom['z']}"/>
         <velocity x="0" y="0" z="0"/>
       </StuntDouble>"""
