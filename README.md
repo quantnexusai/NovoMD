@@ -7,6 +7,8 @@
 
 Open-source REST API for molecular dynamics simulations, protein-ligand docking, and conformational analysis.
 
+![NovoMD Demo](demo.gif)
+
 ## Features
 
 - **SMILES to OpenMD Conversion**: Convert SMILES strings to OpenMD format files with real 3D optimization
