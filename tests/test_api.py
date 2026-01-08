@@ -1,6 +1,7 @@
 """
 Tests for NovoMD API endpoints
 """
+
 import pytest
 
 
@@ -144,14 +145,12 @@ class TestSMILESToOMDEndpoint:
 
     @pytest.mark.skipif(
         not pytest.importorskip("rdkit", reason="RDKit not installed"),
-        reason="RDKit required for SMILES conversion"
+        reason="RDKit required for SMILES conversion",
     )
     def test_valid_smiles_conversion(self, client, auth_headers, sample_smiles):
         """Valid SMILES should be converted successfully"""
         response = client.post(
-            "/smiles-to-omd",
-            json={"smiles": sample_smiles["ethanol"]},
-            headers=auth_headers
+            "/smiles-to-omd", json={"smiles": sample_smiles["ethanol"]}, headers=auth_headers
         )
 
         # Should either succeed or fail gracefully
@@ -168,9 +167,7 @@ class TestSMILESToOMDEndpoint:
     def test_invalid_smiles_handled(self, client, auth_headers):
         """Invalid SMILES should be handled gracefully"""
         response = client.post(
-            "/smiles-to-omd",
-            json={"smiles": "INVALID_SMILES_STRING"},
-            headers=auth_headers
+            "/smiles-to-omd", json={"smiles": "INVALID_SMILES_STRING"}, headers=auth_headers
         )
 
         # Should return 400 or 200 with error in response
@@ -180,11 +177,8 @@ class TestSMILESToOMDEndpoint:
         """SMILES conversion should accept force field parameter"""
         response = client.post(
             "/smiles-to-omd",
-            json={
-                "smiles": sample_smiles["methane"],
-                "force_field": "CHARMM"
-            },
-            headers=auth_headers
+            json={"smiles": sample_smiles["methane"], "force_field": "CHARMM"},
+            headers=auth_headers,
         )
 
         # Should be accepted (may fail if RDKit not available)
@@ -202,9 +196,7 @@ class TestAtom2MDEndpoint:
     def test_atom2md_valid_pdb(self, client, auth_headers, sample_pdb_content):
         """Valid PDB content should be converted"""
         response = client.post(
-            "/atom2md",
-            json={"pdb_content": sample_pdb_content},
-            headers=auth_headers
+            "/atom2md", json={"pdb_content": sample_pdb_content}, headers=auth_headers
         )
 
         assert response.status_code == 200
@@ -217,12 +209,8 @@ class TestAtom2MDEndpoint:
         """atom2md should accept force field parameter"""
         response = client.post(
             "/atom2md",
-            json={
-                "pdb_content": sample_pdb_content,
-                "force_field": "OPLS",
-                "box_size": 50.0
-            },
-            headers=auth_headers
+            json={"pdb_content": sample_pdb_content, "force_field": "OPLS", "box_size": 50.0},
+            headers=auth_headers,
         )
 
         assert response.status_code == 200
@@ -231,10 +219,6 @@ class TestAtom2MDEndpoint:
 
     def test_atom2md_empty_pdb_fails(self, client, auth_headers):
         """Empty PDB content should fail"""
-        response = client.post(
-            "/atom2md",
-            json={"pdb_content": ""},
-            headers=auth_headers
-        )
+        response = client.post("/atom2md", json={"pdb_content": ""}, headers=auth_headers)
 
         assert response.status_code == 400

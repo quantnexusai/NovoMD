@@ -1,7 +1,9 @@
 """
 Pytest configuration and fixtures for NovoMD tests
 """
+
 import os
+
 import pytest
 
 # Set test API key before importing app
@@ -19,7 +21,9 @@ def client():
     """Create a test client for the FastAPI app"""
     # Import here to ensure env var is set first
     from fastapi.testclient import TestClient
+
     from main import app
+
     with TestClient(app) as c:
         yield c
 

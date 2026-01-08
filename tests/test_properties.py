@@ -1,8 +1,9 @@
 """
 Tests for molecular property calculations
 """
-import pytest
+
 import numpy as np
+import pytest
 
 
 class TestCoordinateExtraction:
@@ -45,11 +46,13 @@ class TestMolecularPropertyCalculations:
     @pytest.fixture
     def simple_coords(self):
         """Simple 3D coordinates for testing"""
-        return np.array([
-            [0.0, 0.0, 0.0],
-            [1.5, 0.0, 0.0],
-            [2.3, 1.2, 0.0],
-        ])
+        return np.array(
+            [
+                [0.0, 0.0, 0.0],
+                [1.5, 0.0, 0.0],
+                [2.3, 1.2, 0.0],
+            ]
+        )
 
     @pytest.fixture
     def simple_atoms(self):
@@ -66,9 +69,7 @@ ATOM      2  C   MOL     1       1.500   0.000   0.000  1.00  0.00           C
 ATOM      3  O   MOL     1       2.300   1.200   0.000  1.00  0.00           O
 """
 
-        result = calculate_all_molecular_properties(
-            simple_coords, simple_atoms, None, pdb_content
-        )
+        result = calculate_all_molecular_properties(simple_coords, simple_atoms, None, pdb_content)
 
         assert isinstance(result, dict)
         assert len(result) > 0
@@ -82,9 +83,7 @@ ATOM      2  C   MOL     1       1.500   0.000   0.000  1.00  0.00           C
 ATOM      3  O   MOL     1       2.300   1.200   0.000  1.00  0.00           O
 """
 
-        result = calculate_all_molecular_properties(
-            simple_coords, simple_atoms, None, pdb_content
-        )
+        result = calculate_all_molecular_properties(simple_coords, simple_atoms, None, pdb_content)
 
         # Check geometry properties
         assert "radius_of_gyration" in result
@@ -103,9 +102,7 @@ ATOM      2  C   MOL     1       1.500   0.000   0.000  1.00  0.00           C
 ATOM      3  O   MOL     1       2.300   1.200   0.000  1.00  0.00           O
 """
 
-        result = calculate_all_molecular_properties(
-            simple_coords, simple_atoms, None, pdb_content
-        )
+        result = calculate_all_molecular_properties(simple_coords, simple_atoms, None, pdb_content)
 
         # Check energy properties
         assert "conformer_energy" in result
@@ -121,9 +118,7 @@ ATOM      2  C   MOL     1       1.500   0.000   0.000  1.00  0.00           C
 ATOM      3  O   MOL     1       2.300   1.200   0.000  1.00  0.00           O
 """
 
-        result = calculate_all_molecular_properties(
-            simple_coords, simple_atoms, None, pdb_content
-        )
+        result = calculate_all_molecular_properties(simple_coords, simple_atoms, None, pdb_content)
 
         # Check electrostatic properties
         assert "dipole_moment" in result
@@ -140,9 +135,7 @@ ATOM      2  C   MOL     1       1.500   0.000   0.000  1.00  0.00           C
 ATOM      3  O   MOL     1       2.300   1.200   0.000  1.00  0.00           O
 """
 
-        result = calculate_all_molecular_properties(
-            simple_coords, simple_atoms, None, pdb_content
-        )
+        result = calculate_all_molecular_properties(simple_coords, simple_atoms, None, pdb_content)
 
         # Check surface/volume properties
         assert "sasa" in result
@@ -159,9 +152,7 @@ ATOM      2  C   MOL     1       1.500   0.000   0.000  1.00  0.00           C
 ATOM      3  O   MOL     1       2.300   1.200   0.000  1.00  0.00           O
 """
 
-        result = calculate_all_molecular_properties(
-            simple_coords, simple_atoms, None, pdb_content
-        )
+        result = calculate_all_molecular_properties(simple_coords, simple_atoms, None, pdb_content)
 
         assert result["num_atoms_with_h"] == 3
         assert result["num_heavy_atoms"] == 3  # C, C, O - no hydrogens
@@ -175,9 +166,7 @@ ATOM      2  C   MOL     1       1.500   0.000   0.000  1.00  0.00           C
 ATOM      3  O   MOL     1       2.300   1.200   0.000  1.00  0.00           O
 """
 
-        result = calculate_all_molecular_properties(
-            simple_coords, simple_atoms, None, pdb_content
-        )
+        result = calculate_all_molecular_properties(simple_coords, simple_atoms, None, pdb_content)
 
         assert "coords_x" in result
         assert "coords_y" in result
@@ -192,9 +181,7 @@ ATOM      3  O   MOL     1       2.300   1.200   0.000  1.00  0.00           O
         """Empty coordinates should return empty dict"""
         from main import calculate_all_molecular_properties
 
-        result = calculate_all_molecular_properties(
-            np.array([]).reshape(0, 3), [], None, ""
-        )
+        result = calculate_all_molecular_properties(np.array([]).reshape(0, 3), [], None, "")
 
         assert result == {}
 
@@ -207,25 +194,22 @@ ATOM      2  C   MOL     1       1.500   0.000   0.000  1.00  0.00           C
 ATOM      3  O   MOL     1       2.300   1.200   0.000  1.00  0.00           O
 """
 
-        result = calculate_all_molecular_properties(
-            simple_coords, simple_atoms, None, pdb_content
-        )
+        result = calculate_all_molecular_properties(simple_coords, simple_atoms, None, pdb_content)
 
         assert result["radius_of_gyration"] > 0
 
     def test_span_equals_max_distance(self, simple_coords, simple_atoms):
         """Span should equal maximum pairwise distance"""
-        from main import calculate_all_molecular_properties
         from scipy.spatial.distance import cdist
+
+        from main import calculate_all_molecular_properties
 
         pdb_content = """ATOM      1  C   MOL     1       0.000   0.000   0.000  1.00  0.00           C
 ATOM      2  C   MOL     1       1.500   0.000   0.000  1.00  0.00           C
 ATOM      3  O   MOL     1       2.300   1.200   0.000  1.00  0.00           O
 """
 
-        result = calculate_all_molecular_properties(
-            simple_coords, simple_atoms, None, pdb_content
-        )
+        result = calculate_all_molecular_properties(simple_coords, simple_atoms, None, pdb_content)
 
         # Calculate expected max distance
         distances = cdist(simple_coords, simple_coords)
