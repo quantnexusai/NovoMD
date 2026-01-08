@@ -137,6 +137,17 @@ curl -X POST http://localhost:8010/smiles-to-omd \
 - **Atom Counts** (2): num_atoms_with_h, num_heavy_atoms
 - **3D Visualization** (5+): coords_x, coords_y, coords_z, atom_types, bonds
 
+### Jupyter Notebook Examples
+
+See the [`examples/`](examples/) directory for interactive tutorials:
+
+| Notebook | Description |
+|----------|-------------|
+| [01_getting_started.ipynb](examples/01_getting_started.ipynb) | Basic API usage and molecular conversion |
+| [02_molecular_properties.ipynb](examples/02_molecular_properties.ipynb) | Property analysis with pandas and matplotlib |
+| [03_visualization.ipynb](examples/03_visualization.ipynb) | 3D visualization with plotly and py3Dmol |
+| [04_batch_processing.ipynb](examples/04_batch_processing.ipynb) | Parallel processing and rate limiting |
+
 ## API Endpoints
 
 | Endpoint | Method | Description |
@@ -228,6 +239,11 @@ NovoMD/
 │   ├── conftest.py          # Pytest fixtures
 │   ├── test_api.py          # API endpoint tests
 │   └── test_properties.py   # Property calculation tests
+├── examples/                # Jupyter notebook tutorials
+│   ├── 01_getting_started.ipynb
+│   ├── 02_molecular_properties.ipynb
+│   ├── 03_visualization.ipynb
+│   └── 04_batch_processing.ipynb
 └── .github/
     ├── ISSUE_TEMPLATE/      # Issue templates
     │   ├── bug_report.md
