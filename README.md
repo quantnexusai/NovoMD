@@ -31,7 +31,23 @@ Open-source REST API for molecular dynamics simulations, protein-ligand docking,
 
 ## Quick Start
 
-### Using Docker (Recommended)
+### Using Pre-built Docker Image (Fastest)
+
+```bash
+# Pull and run the latest image
+docker run -d \
+  -p 8010:8010 \
+  -e NOVOMD_API_KEY="your-secure-api-key" \
+  --name novomd \
+  ghcr.io/quantnexusai/novomd:latest
+
+# Test the service
+curl http://localhost:8010/health
+```
+
+Available tags: `latest`, `main`, `v1.1.0`, `v1.1`, `v1`
+
+### Using Docker Compose
 
 1. **Clone the repository**
    ```bash
