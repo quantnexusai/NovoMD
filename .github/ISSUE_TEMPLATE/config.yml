@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/quantnexusai/NovoMD#readme
+    about: Check the README for usage instructions and API documentation
+  - name: Security Vulnerabilities
+    url: https://github.com/quantnexusai/NovoMD/security/policy
+    about: Please report security vulnerabilities through our security policy

@@ -213,6 +213,11 @@ NovoMD/
 │   ├── test_api.py          # API endpoint tests
 │   └── test_properties.py   # Property calculation tests
 └── .github/
+    ├── ISSUE_TEMPLATE/      # Issue templates
+    │   ├── bug_report.md
+    │   ├── feature_request.md
+    │   └── config.yml
+    ├── PULL_REQUEST_TEMPLATE.md
     └── workflows/
         └── ci.yml           # CI/CD pipeline
 ```
