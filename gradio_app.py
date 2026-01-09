@@ -3,13 +3,14 @@ NovoMD Gradio Interface for Hugging Face Spaces
 A user-friendly web interface for molecular dynamics calculations.
 """
 
-import gradio as gr
 import json
+
+import gradio as gr
 
 # Import directly from the main module to avoid HTTP overhead
 try:
     from rdkit import Chem
-    from rdkit.Chem import AllChem, Draw, Descriptors
+    from rdkit.Chem import AllChem, Descriptors, Draw
 
     RDKIT_AVAILABLE = True
 except ImportError:
