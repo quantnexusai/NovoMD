@@ -10,6 +10,7 @@ import json
 try:
     from rdkit import Chem
     from rdkit.Chem import AllChem, Draw, Descriptors
+
     RDKIT_AVAILABLE = True
 except ImportError:
     RDKIT_AVAILABLE = False
@@ -96,9 +97,9 @@ def process_molecule(smiles: str, force_field: str):
             span_r = 0.0
 
         # Surface area and volume estimates
-        sasa = 4 * np.pi * (rg + 1.4)**2  # Approximate with probe radius
-        mol_volume = (4/3) * np.pi * rg**3
-        globularity = (np.pi**(1/3) * (6 * mol_volume)**(2/3)) / sasa if sasa > 0 else 0
+        sasa = 4 * np.pi * (rg + 1.4) ** 2  # Approximate with probe radius
+        mol_volume = (4 / 3) * np.pi * rg**3
+        globularity = (np.pi ** (1 / 3) * (6 * mol_volume) ** (2 / 3)) / sasa if sasa > 0 else 0
         surface_to_volume = sasa / mol_volume if mol_volume > 0 else 0
 
         # Energy calculations using MMFF
@@ -115,9 +116,11 @@ def process_molecule(smiles: str, force_field: str):
 
         # Partial charges
         AllChem.ComputeGasteigerCharges(mol)
-        charges = [float(mol.GetAtomWithIdx(i).GetProp('_GasteigerCharge'))
-                   for i in range(mol.GetNumAtoms())
-                   if not np.isnan(float(mol.GetAtomWithIdx(i).GetProp('_GasteigerCharge')))]
+        charges = [
+            float(mol.GetAtomWithIdx(i).GetProp("_GasteigerCharge"))
+            for i in range(mol.GetNumAtoms())
+            if not np.isnan(float(mol.GetAtomWithIdx(i).GetProp("_GasteigerCharge")))
+        ]
 
         if charges:
             max_charge = max(charges)
@@ -190,34 +193,37 @@ def process_molecule(smiles: str, force_field: str):
 """
 
         # JSON output for developers
-        json_output = json.dumps({
-            "success": True,
-            "smiles": smiles,
-            "force_field": force_field,
-            "properties": {
-                "molecular_weight": round(molecular_weight, 2),
-                "num_atoms_with_h": num_atoms_with_h,
-                "num_heavy_atoms": num_heavy_atoms,
-                "radius_of_gyration": round(rg, 3),
-                "asphericity": round(asphericity, 3),
-                "eccentricity": round(eccentricity, 3),
-                "span_r": round(span_r, 3),
-                "sasa": round(sasa, 2),
-                "molecular_volume": round(mol_volume, 2),
-                "globularity": round(globularity, 3),
-                "surface_to_volume_ratio": round(surface_to_volume, 3),
-                "conformer_energy": round(conformer_energy, 2),
-                "vdw_energy": round(vdw_energy, 2),
-                "electrostatic_energy": round(electrostatic_energy, 2),
-                "torsion_strain": round(torsion_strain, 2),
-                "angle_strain": round(angle_strain, 2),
-                "dipole_moment": round(dipole_moment, 3),
-                "total_charge": round(total_charge, 4),
-                "max_partial_charge": round(max_charge, 4),
-                "min_partial_charge": round(min_charge, 4),
-                "charge_span": round(charge_span, 4),
-            }
-        }, indent=2)
+        json_output = json.dumps(
+            {
+                "success": True,
+                "smiles": smiles,
+                "force_field": force_field,
+                "properties": {
+                    "molecular_weight": round(molecular_weight, 2),
+                    "num_atoms_with_h": num_atoms_with_h,
+                    "num_heavy_atoms": num_heavy_atoms,
+                    "radius_of_gyration": round(rg, 3),
+                    "asphericity": round(asphericity, 3),
+                    "eccentricity": round(eccentricity, 3),
+                    "span_r": round(span_r, 3),
+                    "sasa": round(sasa, 2),
+                    "molecular_volume": round(mol_volume, 2),
+                    "globularity": round(globularity, 3),
+                    "surface_to_volume_ratio": round(surface_to_volume, 3),
+                    "conformer_energy": round(conformer_energy, 2),
+                    "vdw_energy": round(vdw_energy, 2),
+                    "electrostatic_energy": round(electrostatic_energy, 2),
+                    "torsion_strain": round(torsion_strain, 2),
+                    "angle_strain": round(angle_strain, 2),
+                    "dipole_moment": round(dipole_moment, 3),
+                    "total_charge": round(total_charge, 4),
+                    "max_partial_charge": round(max_charge, 4),
+                    "min_partial_charge": round(min_charge, 4),
+                    "charge_span": round(charge_span, 4),
+                },
+            },
+            indent=2,
+        )
 
         return img, properties_md, json_output, ""
 
@@ -232,10 +238,11 @@ with gr.Blocks(
     css="""
         .gradio-container { max-width: 1200px !important; }
         .molecule-image { border-radius: 8px; }
-    """
+    """,
 ) as demo:
 
-    gr.Markdown("""
+    gr.Markdown(
+        """
     # NovoMD - Molecular Dynamics API
 
     Calculate 32+ molecular properties from SMILES strings using real 3D coordinate optimization.
@@ -243,7 +250,8 @@ with gr.Blocks(
     **Features:** Geometry analysis, energy calculations, electrostatic properties, surface/volume metrics, and more.
 
     [GitHub](https://github.com/quantnexusai/NovoMD) | [API Documentation](https://github.com/quantnexusai/NovoMD#api-usage)
-    """)
+    """
+    )
 
     with gr.Row():
         with gr.Column(scale=1):
@@ -304,7 +312,8 @@ with gr.Blocks(
         outputs=[molecule_image, properties_output, json_output, error_output],
     )
 
-    gr.Markdown("""
+    gr.Markdown(
+        """
     ---
 
     **About NovoMD**
@@ -318,8 +327,9 @@ with gr.Blocks(
     ```
 
     MIT License | Built with FastAPI, RDKit, and Gradio
-    """)
+    """
+    )
 
 
 if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860)
+    demo.launch(server_name="0.0.0.0", server_port=7860)  # nosec B104
