@@ -163,7 +163,8 @@ jobs:
       - name: Test Docker image
         if: github.event_name == 'pull_request'
         run: |
-          docker run -d --name novomd-test -e NOVOMD_API_KEY=test-key -p 8010:8010 ghcr.io/${{ github.repository }}:${{ github.sha }}
+          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          docker run -d --name novomd-test -e NOVOMD_API_KEY=test-key -p 8010:8010 ${IMAGE_NAME}:${{ github.sha }}
           sleep 10
           curl -f http://localhost:8010/health || exit 1
           docker stop novomd-test
