@@ -1,0 +1,5 @@
+# Requirements for Hugging Face Spaces deployment
+gradio>=4.0.0
+rdkit>=2023.9.1
+numpy>=1.24.3,<2.0.0
+scipy>=1.11.0
