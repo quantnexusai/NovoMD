@@ -27,6 +27,8 @@ EXPOSE 7860
 # Set environment variables
 ENV GRADIO_SERVER_NAME="0.0.0.0"
 ENV GRADIO_SERVER_PORT="7860"
+ENV GRADIO_MCP_SERVER="True"
 
-# Run with the conda environment
-CMD ["conda", "run", "-n", "novomd", "python", "app.py"]
+# Activate conda env and run (shell form to inherit env vars)
+SHELL ["/bin/bash", "-c"]
+CMD source activate novomd && python app.py
