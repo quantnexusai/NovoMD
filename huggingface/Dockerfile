@@ -11,8 +11,8 @@ RUN conda create -n novomd python=3.11 -y && \
     scipy \
     && conda clean -afy
 
-# Install Gradio in the environment
-RUN conda run -n novomd pip install --no-cache-dir gradio>=4.0.0
+# Install Gradio with MCP support
+RUN conda run -n novomd pip install --no-cache-dir "gradio[mcp]>=5.32.0"
 
 # Copy application files
 COPY app.py .
@@ -27,7 +27,7 @@ EXPOSE 7860
 # Set environment variables
 ENV GRADIO_SERVER_NAME="0.0.0.0"
 ENV GRADIO_SERVER_PORT="7860"
-ENV GRADIO_MCP_SERVER="True"
+ENV GRADIO_MCP_SERVER="true"
 
 # Activate conda env and run (shell form to inherit env vars)
 SHELL ["/bin/bash", "-c"]

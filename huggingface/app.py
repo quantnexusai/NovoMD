@@ -233,14 +233,7 @@ def process_molecule(smiles: str, force_field: str):
 
 
 # Create Gradio interface
-with gr.Blocks(
-    title="NovoMD - Molecular Dynamics API",
-    theme=gr.themes.Soft(),
-    css="""
-        .gradio-container { max-width: 1200px !important; }
-        .molecule-image { border-radius: 8px; }
-    """,
-) as demo:
+with gr.Blocks(title="NovoMD - Molecular Dynamics API") as demo:
 
     gr.Markdown(
         """
@@ -333,4 +326,8 @@ with gr.Blocks(
 
 
 if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860, mcp_server=True)  # nosec B104
+    demo.launch(
+        server_name="0.0.0.0",  # nosec B104
+        server_port=7860,
+        mcp_server=True,
+    )
