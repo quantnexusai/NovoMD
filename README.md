@@ -104,6 +104,43 @@ Available tags: `latest`, `main`, `v1.1.0`, `v1.1`, `v1`
    - Swagger UI: http://localhost:8010/docs
    - ReDoc: http://localhost:8010/redoc
 
+## MCP Server (AI Assistant Integration)
+
+NovoMD is available as an MCP (Model Context Protocol) server, allowing AI assistants like Claude to directly query molecular properties.
+
+**MCP Endpoint:** `https://quantnexusai-novomd.hf.space/gradio_api/mcp/sse`
+
+### Adding to Claude Desktop
+
+1. Open Claude Desktop settings
+2. Go to **Integrations** > **Add Custom Connector**
+3. Enter the MCP URL:
+   ```
+   https://quantnexusai-novomd.hf.space/gradio_api/mcp/sse
+   ```
+4. Save and restart Claude
+
+Once connected, you can ask Claude questions like:
+- "What are the 3D coordinates for Acetaminophen?"
+- "Calculate the molecular properties of aspirin (CC(=O)OC1=CC=CC=C1C(=O)O)"
+- "What is the dipole moment of caffeine?"
+
+### Response Data
+
+The MCP server returns comprehensive molecular data including:
+- **Properties**: 20+ calculated descriptors (geometry, energy, electrostatics, surface/volume)
+- **3D Structure**: Full atomic coordinates (`coords_x`, `coords_y`, `coords_z`), atom types, and bond connectivity
+
+### Other MCP-Compatible AI Assistants
+
+NovoMD's MCP server works with any AI assistant that supports the Model Context Protocol:
+- **Claude Desktop** - Native MCP support
+- **Cursor** - Via MCP configuration
+- **Continue.dev** - VS Code extension with MCP support
+- **Custom agents** - Any application using the [MCP specification](https://modelcontextprotocol.io/)
+
+For programmatic access, use the SSE endpoint directly or integrate via the [MCP SDK](https://github.com/modelcontextprotocol/sdk).
+
 ## API Usage
 
 ### Authentication
