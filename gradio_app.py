@@ -138,6 +138,25 @@ def process_molecule(smiles: str, force_field: str):
                 dipole += charges[i] * pos
         dipole_moment = np.linalg.norm(dipole) * 4.803  # Convert to Debye
 
+        # Extract 3D coordinates
+        coords_x = [round(pos[0], 4) for pos in positions]
+        coords_y = [round(pos[1], 4) for pos in positions]
+        coords_z = [round(pos[2], 4) for pos in positions]
+
+        # Extract atom types (element symbols)
+        atom_types = [mol.GetAtomWithIdx(i).GetSymbol() for i in range(mol.GetNumAtoms())]
+
+        # Extract bond connectivity
+        bonds = []
+        for bond in mol.GetBonds():
+            bonds.append(
+                {
+                    "begin_atom_idx": bond.GetBeginAtomIdx(),
+                    "end_atom_idx": bond.GetEndAtomIdx(),
+                    "bond_type": str(bond.GetBondType()),
+                }
+            )
+
         # Generate 2D image
         mol_2d = Chem.MolFromSmiles(smiles)
         if mol_2d:
@@ -191,6 +210,17 @@ def process_molecule(smiles: str, force_field: str):
 | Max Partial Charge | {max_charge:.4f} |
 | Min Partial Charge | {min_charge:.4f} |
 | Charge Span | {charge_span:.4f} |
+
+### 3D Structure
+| Property | Value |
+|----------|-------|
+| Atoms | {num_atoms_with_h} |
+| Bonds | {len(bonds)} |
+| Coordinate Range X | [{min(coords_x):.3f}, {max(coords_x):.3f}] Å |
+| Coordinate Range Y | [{min(coords_y):.3f}, {max(coords_y):.3f}] Å |
+| Coordinate Range Z | [{min(coords_z):.3f}, {max(coords_z):.3f}] Å |
+
+*Full 3D coordinates available in JSON output below.*
 """
 
         # JSON output for developers
@@ -221,6 +251,15 @@ def process_molecule(smiles: str, force_field: str):
                     "max_partial_charge": round(max_charge, 4),
                     "min_partial_charge": round(min_charge, 4),
                     "charge_span": round(charge_span, 4),
+                },
+                "structure_3d": {
+                    "atom_types": atom_types,
+                    "coords_x": coords_x,
+                    "coords_y": coords_y,
+                    "coords_z": coords_z,
+                    "bonds": bonds,
+                    "num_atoms": num_atoms_with_h,
+                    "num_bonds": len(bonds),
                 },
             },
             indent=2,
