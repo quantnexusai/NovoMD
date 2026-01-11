@@ -110,15 +110,21 @@ NovoMD is available as an MCP (Model Context Protocol) server, allowing AI assis
 
 **MCP Endpoint:** `https://quantnexusai-novomd.hf.space/gradio_api/mcp/sse`
 
-### Adding to Claude Desktop
+### Adding to Claude
 
-1. Open Claude Desktop settings
-2. Go to **Integrations** > **Add Custom Connector**
+**Claude.ai (Web) - Pro/Team users:**
+1. Go to **Settings** > **Integrations**
+2. Click **Add Custom Connector**
 3. Enter the MCP URL:
    ```
    https://quantnexusai-novomd.hf.space/gradio_api/mcp/sse
    ```
-4. Save and restart Claude
+4. Save and refresh
+
+**Claude Desktop:**
+1. Open Settings > **Integrations**
+2. Add the same MCP URL as above
+3. Restart Claude Desktop
 
 Once connected, you can ask Claude questions like:
 - "What are the 3D coordinates for Acetaminophen?"
@@ -134,7 +140,7 @@ The MCP server returns comprehensive molecular data including:
 ### Other MCP-Compatible AI Assistants
 
 NovoMD's MCP server works with any AI assistant that supports the Model Context Protocol:
-- **Claude Desktop** - Native MCP support
+- **Claude** (Web & Desktop) - Native MCP support via custom connectors
 - **Cursor** - Via MCP configuration
 - **Continue.dev** - VS Code extension with MCP support
 - **Custom agents** - Any application using the [MCP specification](https://modelcontextprotocol.io/)
